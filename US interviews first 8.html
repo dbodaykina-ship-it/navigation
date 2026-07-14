@@ -30,10 +30,10 @@
     width:100%;max-width:1180px;height:min(80vh,740px);
     background:var(--card);border-radius:22px;
     box-shadow:0 24px 60px rgba(13,27,42,.14);
-    display:grid;grid-template-columns:0.9fr 1.1fr;gap:38px;
+    display:grid;grid-template-columns:0.9fr 1.1fr;grid-template-rows:minmax(0,1fr);gap:38px;
     padding:42px 46px;overflow:hidden;
   }
-  .left{display:flex;flex-direction:column;height:100%;overflow:hidden;}
+  .left{display:flex;flex-direction:column;height:100%;min-height:0;overflow:hidden;}
   .pill{
     align-self:flex-start;display:inline-flex;align-items:center;gap:8px;
     border:1px solid var(--line);border-radius:999px;padding:7px 14px;
@@ -51,7 +51,7 @@
   .q .txt::before{content:"“";}
   .q .txt::after{content:"”";}
 
-  .right{height:100%;min-width:0;}
+  .right{height:100%;min-width:0;min-height:0;}
   .shots{display:flex;flex-direction:column;gap:12px;height:100%;overflow-y:auto;padding-right:6px;}
   .shots::-webkit-scrollbar{width:6px;}
   .shots::-webkit-scrollbar-thumb{background:#d6dae0;border-radius:3px;}
@@ -271,7 +271,16 @@ function go(n){ idx=Math.max(0,Math.min(panels.length-1,n)); panels[idx].scrollI
 function update(){ cur.textContent=idx+1; prev.disabled=idx===0; next.disabled=idx===panels.length-1; }
 prev.onclick=()=>go(idx-1); next.onclick=()=>go(idx+1);
 document.addEventListener('keydown',e=>{ if(e.key==='ArrowRight')go(idx+1); if(e.key==='ArrowLeft')go(idx-1); });
-deck.addEventListener('wheel',e=>{ if(Math.abs(e.deltaY)>Math.abs(e.deltaX)){ e.preventDefault(); deck.scrollLeft+=e.deltaY; } },{passive:false});
+deck.addEventListener('wheel',e=>{
+  // вертикальный скролл внутри панели (скрины/цитаты) — не перехватываем, пока есть куда крутить
+  const inner=e.target.closest('.shots,.quotes');
+  if(inner){
+    const canScroll=inner.scrollHeight>inner.clientHeight+1;
+    const atTop=inner.scrollTop<=0, atBottom=inner.scrollTop+inner.clientHeight>=inner.scrollHeight-1;
+    if(canScroll && !((e.deltaY<0&&atTop)||(e.deltaY>0&&atBottom))) return;
+  }
+  if(Math.abs(e.deltaY)>Math.abs(e.deltaX)){ e.preventDefault(); deck.scrollLeft+=e.deltaY; }
+},{passive:false});
 let t; deck.addEventListener('scroll',()=>{ clearTimeout(t); t=setTimeout(()=>{ idx=Math.round(deck.scrollLeft/window.innerWidth); update(); },80); });
 update();
 </script>
