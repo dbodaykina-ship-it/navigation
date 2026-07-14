@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>UX Testing July 2026 — Тезисы и подтверждения</title>
+<style>
+  :root{
+    --blue:#0B57F0; --ink:#0d1b2a; --muted:#5b6675; --line:#e7eaee;
+    --page:#c9ccd1; --card:#ffffff; --soft:#f4f6f8;
+    --yellow:#E9B10A; --pink:#E4629B; --green:#2FB457; --red:#F0444B;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  html,body{height:100%;}
+  body{
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Inter,Roboto,Arial,sans-serif;
+    background:var(--page);color:var(--ink);overflow:hidden;
+  }
+  #deck{
+    display:flex;height:100vh;width:100vw;
+    overflow-x:auto;overflow-y:hidden;
+    scroll-snap-type:x mandatory;scroll-behavior:smooth;scrollbar-width:none;
+  }
+  #deck::-webkit-scrollbar{display:none;}
+  .panel{
+    flex:0 0 100vw;height:100vh;scroll-snap-align:center;
+    display:flex;align-items:center;justify-content:center;padding:44px 60px;
+  }
+  .card{
+    width:100%;max-width:1180px;height:min(80vh,740px);
+    background:var(--card);border-radius:22px;
+    box-shadow:0 24px 60px rgba(13,27,42,.14);
+    display:grid;grid-template-columns:0.9fr 1.1fr;gap:38px;
+    padding:42px 46px;overflow:hidden;
+  }
+  .left{display:flex;flex-direction:column;height:100%;overflow:hidden;}
+  .pill{
+    align-self:flex-start;display:inline-flex;align-items:center;gap:8px;
+    border:1px solid var(--line);border-radius:999px;padding:7px 14px;
+    font-size:11px;font-weight:700;letter-spacing:.09em;text-transform:uppercase;
+    color:var(--muted);margin-bottom:20px;
+  }
+  .dot{width:9px;height:9px;border-radius:50%;background:var(--blue);}
+  .thesis{font-size:28px;line-height:1.16;font-weight:650;letter-spacing:-.01em;margin-bottom:20px;}
+  .quotes{overflow-y:auto;padding-right:8px;flex:1;}
+  .quotes::-webkit-scrollbar{width:6px;}
+  .quotes::-webkit-scrollbar-thumb{background:#d6dae0;border-radius:3px;}
+  .q{margin-bottom:15px;padding-left:14px;border-left:3px solid var(--blue);}
+  .q .who{font-size:12.5px;font-weight:700;color:var(--blue);margin-bottom:4px;}
+  .q .txt{font-size:13.5px;line-height:1.5;color:#33404f;}
+  .q .txt::before{content:"“";}
+  .q .txt::after{content:"”";}
+
+  .right{height:100%;min-width:0;}
+  .shots{display:flex;flex-direction:column;gap:12px;height:100%;overflow-y:auto;padding-right:6px;}
+  .shots::-webkit-scrollbar{width:6px;}
+  .shots::-webkit-scrollbar-thumb{background:#d6dae0;border-radius:3px;}
+  .shot{
+    position:relative;flex:0 0 auto;border-radius:12px;overflow:hidden;
+    background:var(--soft);border:1px solid var(--line);
+  }
+  .shot img{width:100%;height:auto;display:block;}
+  .cap{
+    position:absolute;left:10px;bottom:10px;z-index:2;
+    background:rgba(13,27,42,.78);color:#fff;font-size:11.5px;font-weight:700;
+    padding:4px 10px;border-radius:999px;backdrop-filter:blur(4px);
+  }
+  .ph{position:absolute;inset:0;display:none;flex-direction:column;align-items:center;
+    justify-content:center;gap:8px;color:#9aa5b1;text-align:center;padding:16px;}
+  .ph .file{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:12px;
+    background:#eef1f4;border:1px solid #e0e4e9;border-radius:8px;padding:5px 10px;color:#5b6675;}
+  .badge{position:absolute;top:14px;right:16px;z-index:5;
+    background:rgba(11,87,240,.92);color:#fff;font-size:12px;font-weight:700;
+    padding:5px 11px;border-radius:999px;}
+
+  .cat-opinion .dot{background:var(--yellow);}
+  .cat-takeaway .dot{background:var(--pink);}
+  .cat-liked .dot{background:var(--green);}
+  .cat-problem .dot{background:var(--red);}
+  .cat-opinion .q{border-left-color:var(--yellow);} .cat-opinion .q .who{color:#b0850a;}
+  .cat-takeaway .q{border-left-color:var(--pink);}  .cat-takeaway .q .who{color:#c04a80;}
+  .cat-liked .q{border-left-color:var(--green);}    .cat-liked .q .who{color:#219a45;}
+  .cat-problem .q{border-left-color:var(--red);}    .cat-problem .q .who{color:#d2363c;}
+
+  .cover .card{grid-template-columns:1fr;place-items:center;text-align:center;}
+  .cover .kicker{font-size:12px;font-weight:700;letter-spacing:.14em;color:var(--blue);text-transform:uppercase;margin-bottom:18px;}
+  .cover h1{font-size:42px;line-height:1.1;letter-spacing:-.02em;max-width:760px;margin-bottom:18px;}
+  .cover p{font-size:16px;color:var(--muted);max-width:560px;line-height:1.55;}
+  .legend{display:flex;gap:22px;margin-top:34px;flex-wrap:wrap;justify-content:center;}
+  .legend span{display:inline-flex;align-items:center;gap:8px;font-size:13px;color:#44505f;font-weight:600;}
+  .legend i{width:11px;height:11px;border-radius:50%;display:inline-block;}
+
+  .nav{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);
+    display:flex;align-items:center;gap:16px;z-index:20;
+    background:rgba(255,255,255,.9);backdrop-filter:blur(8px);
+    border:1px solid var(--line);border-radius:999px;padding:8px 12px;
+    box-shadow:0 8px 24px rgba(13,27,42,.12);}
+  .nav button{width:38px;height:38px;border-radius:50%;border:none;cursor:pointer;
+    background:var(--blue);color:#fff;font-size:17px;display:flex;align-items:center;justify-content:center;transition:.15s;}
+  .nav button:hover{background:#0847c9;}
+  .nav button:disabled{background:#c3ccd8;cursor:default;}
+  .counter{font-size:13px;font-weight:700;min-width:52px;text-align:center;}
+  .hint-key{position:fixed;bottom:28px;right:24px;font-size:12px;color:#7a8492;z-index:20;}
+</style>
+</head>
+<body>
+<div id="deck"></div>
+<div class="nav">
+  <button id="prev">‹</button>
+  <span class="counter"><span id="cur">1</span>/<span id="total">1</span></span>
+  <button id="next">›</button>
+</div>
+<div class="hint-key">← / → или колесо мыши для листания</div>
+
+<script>
+const DIR = "screenshots/";
+const CAT = {opinion:"Мнение о продукте", takeaway:"Критикал", liked:"Понравилось", problem:"Проблема"};
+
+// каждая цитата = {who, txt, img}. img — файл в screenshots/
+const SLIDES = [
+  {cover:true},
+
+  {cat:"opinion", title:"TradingView — слишком сложный", quotes:[
+    {who:"Ansh · 18:12", img:"Ansh_18-12.jpg", txt:"I was very overwhelmed because there's a lot of different components I didn't fully understand, especially the stock screening. So many metrics, so many indicators. I didn't quite understand how the candle charts were working."}]},
+
+  {cat:"opinion", title:"Брокерские приложения — старые и скучные", quotes:[
+    {who:"Ansh · 10:48", img:"Ansh_10-48.jpg", txt:"A lot of these brokerage apps, with the exception of Robinhood, is kind of old. The JP Morgan one looks very old, very boring. It doesn't update on time. It's very hard to manually navigate everything."}]},
+
+  {cat:"opinion", title:"AI не должен принимать решения без меня", quotes:[
+    {who:"Ansh · 22:06", img:"Ansh_22-06.jpg", txt:"I'd be fine with anything as long as it couldn't make the final decision without me. I draw the line where it makes decisions — buying or selling."},
+    {who:"Kiyan · 15:15", img:"Kiyan_15-15.jpg", txt:"Making decision... this is for human."},
+    {who:"Dong Hyuk · 13:32", img:"DongHyuk_13-32.jpg", txt:"I don't think I would let it automatically trade for me — definitely not something autonomous."}]},
+
+  {cat:"opinion", title:"Красный флаг — если AI велит покупать", quotes:[
+    {who:"Brandt · 23:00", img:"Brandt_23-00.jpg", txt:"If an AI system did say you should press buy or sell, that would probably be like a red flag personally for me."}]},
+
+  {cat:"opinion", title:"Автономная торговля — нет доказуемого трек-рекорда", quotes:[
+    {who:"Ryan · 25:43", img:"Ryan_25-43.jpg", txt:"If the bot is essentially actively trading on my end, I'd rather not. You can't exactly backtest the bot. You have no evidence of it having a great track record."}]},
+
+  {cat:"takeaway", title:"Не даст AI доступ к счёту — исчезнет edge", quotes:[
+    {who:"Ryan · 23:08", img:"Ryan_23-08.jpg", txt:"Assuming I am finding a decent strategy, it should have an edge. As soon as that edge is known — which is what the AI is doing — it goes away. I can't make a profit."},
+    {who:"Anuj · 23:00 (исключение)", img:"Anuj_23-00.jpg", txt:"If there is an automated system, I would trust it as long as it's making some kind of profit at the end of the day."}]},
+
+  {cat:"takeaway", title:"Не нашёл свёрнутый AI-чат. Навигация 2/10, не ожидал нодовой системы", quotes:[
+    {who:"Ryan · 37:04", img:"Ryan_37-04.jpg", txt:"Ryan: Like this one right here. — Интервьюер: No, no, no. The one on the left."},
+    {who:"Ryan · 46:48", img:"Ryan_46-48.jpg", txt:"How clear and convenient was it to find what you needed? — Two out of ten, not really."},
+    {who:"Dong Hyuk · 16:31", img:"DongHyuk_16-31.jpg", txt:"The style of how the boxes are connected — I don't think it would be intuitive for more common-level traders."}]},
+
+  {cat:"liked", title:"Намного профессиональнее старых приложений", quotes:[
+    {who:"Ansh · 25:54", img:"Ansh_25-54.jpg", txt:"The color scheme is already an improvement for my current brokerage. It seems a bit more professional than the app I use."},
+    {who:"Ansh · 27:35", img:"Ansh_27-35.jpg", txt:"The interface looks much more professional and something I would like to look at, especially trading for so many hours a day."}]},
+
+  {cat:"liked", title:"Панель инструментов для рутины", quotes:[
+    {who:"Ansh · 55:31", img:"Ansh_55-31.jpg", txt:"The biggest one would be the routine in the widget style and the way you can connect it. That's something which I haven't seen."},
+    {who:"Ansh · 53:51", img:"Ansh_53-51.jpg", txt:"I really like the routine strategy. Instead of doing the same thing again and again, you have it automated."},
+    {who:"Anuj · 49:19", img:"Anuj_49-19.jpg", txt:"Rather than me going and looking at their financials somewhere else I could just do it within here — I have to open less tabs."}]},
+
+  {cat:"liked", title:"«Ask AI» по графику очень понравился", quotes:[
+    {who:"Anuj · 45:04", img:"Anuj_45-04.jpg", txt:"This function of being able to ask AI is very, very useful. I think I would use it for almost everything just to get AI's opinion."},
+    {who:"Ansh · 37:16", img:"Ansh_37-16.jpg", txt:"This is pretty similar to what I am used to. The summary at the end and the reasoning behind it makes sense."}]},
+
+  {cat:"problem", title:"Выделение группы не привязывает тикеры к рутине", quotes:[
+    {who:"Anuj · 45:48–46:49", img:"Anuj_45-48.jpg", txt:"What do I do? ... Now, oh — I don't think it happened. — Интервьюер: it's only one."},
+    {who:"Ansh · 28:55 (ожидание)", img:"Ansh_28-55.jpg", txt:"If I add a ticker and it'll go through a certain prompt and tell me whether it meets it."}]},
+
+  {cat:"problem", title:"Непонятно, что чат закрывается в меню, а не в шапке чата", quotes:[
+    {who:"Ansh · 46:29", img:"Ansh_46-29.jpg", txt:"You can close AI chat from the left side... you see the switch here at the left corner... no no, below below, left corner. (пользователь не находит сам)"}]},
+
+  {cat:"problem", title:"Не нашёл, где промт-библиотека", quotes:[
+    {who:"Ansh · 48:00", img:"Ansh_48-00.jpg", txt:"This is not... yeah this one... so go upper... click on prompt library, below below, left, right, right — Oh, okay, here."}]},
+
+  {cat:"problem", title:"Желание увидеть два результата / перепроверить ответ рутины", quotes:[
+    {who:"Ansh · 13:59", img:"Ansh_13-59.jpg", txt:"I tried two different chats with the same tickers and would often get extremely different recommendations. I still confirm it every time — one mistake is all it takes."}]},
+
+  {cat:"problem", title:"«Add to board» — нет обратной связи (пропущен стейт с тиком)", quotes:[
+    {who:"Ansh · 37:50–38:24", img:"Ansh_37-50.jpg", txt:"Yeah, I clicked it, I think... it doesn't seem to be coming... it was just stuck."},
+    {who:"Brandt · 34:46", img:"Brandt_34-46.jpg", txt:"I think I'm pressing the wrong button. It says AI chat response was saved as a card. ... No, I do not see it on board."}]},
+
+  {cat:"problem", title:"Кнопку «Ask AI» на графике не смог найти", quotes:[
+    {who:"Ansh · 33:50", img:"Ansh_33-50.jpg", txt:"Интервьюер: Click on title. — Ansh: Oh, on this? — No, no, no. On title. — Three, ask AI."},
+    {who:"Kiyan · 27:43", img:"Kiyan_27-43.jpg", txt:"So SK AI, how to here? ... How so SKI. (не сработало)"},
+    {who:"Daniel · 34:50", img:"Daniel_34-50.jpg", txt:"Oh, there. Okay. (нашёл только после подсказки)"}]},
+
+  {cat:"problem", title:"Раздел «Strategies» — не понимают (уже 2 раза)", quotes:[
+    {who:"Ansh · 28:55", img:"Ansh_28-55.jpg", txt:"I'm guessing this is a stock screener... if I'm not wrong. — Интервьюер: Yeah, you're wrong."},
+    {who:"Daniel · 27:12", img:"Daniel_27-12.jpg", txt:"I kind of don't really understand how it's used... if you add a prompt, would it give you a strategy? ... I don't know."}]},
+
+  {cat:"problem", title:"Доска и соединение нод — «janky»", quotes:[
+    {who:"Daniel · 37:56", img:"Daniel_37-56.jpg", txt:"The board is a little bit janky, but how it connects might be a little bit confusing for someone that doesn't know anything about the platform."}]},
+
+  {cat:"problem", title:"Читаемость — цифры и буквы слишком похожи", quotes:[
+    {who:"Kiyan · 32:40", img:"Kiyan_32-40.jpg", txt:"The letter, the number, it's really similar, so I can't see well... when I move this screen, I can't see it. It's uncomfortable."},
+    {who:"Anuj · 28:40", img:"Anuj_28-40.jpg", txt:"I do feel that with this color, it's a little hard to read the white on it."}]},
+
+  {cat:"problem", title:"Настройка inputs в Routine — потребовалось много подсказок", quotes:[
+    {who:"Anuj · 50:35–51:35", img:"Anuj_50-35.jpg", txt:"Интервьюер ведёт: Press input... no no, above... no, below below, inputs. — Anuj: Oh, yeah. Yeah, clicked."},
+    {who:"Ansh · 40:24", img:"Ansh_40-24.jpg", txt:"Within routine there is input parameters above the button... click inputs and you can choose notes, digits, tickers data."}]},
+
+  {cat:"problem", title:"«AI screener» — не понял даже самый технический респондент", quotes:[
+    {who:"Ryan · 30:11", img:"Ryan_30-11.jpg", txt:"Let's see, AI screener... A little bit confused on what this one is, but I'm assuming it's going to be writing."},
+    {who:"Dong Hyuk · 16:31", img:"DongHyuk_16-31.jpg", txt:"I don't think I would call it 'find signals'... a signal is kind of different."}]},
+
+  {cat:"problem", title:"Группировка нод / соединение на доске — стабильно не даётся", quotes:[
+    {who:"Anuj · 45:48", img:"Anuj_45-48.jpg", txt:"What do I do? ... Now, oh — I don't think it happened. ... it's only one."},
+    {who:"Daniel · 37:56", img:"Daniel_37-56.jpg", txt:"Drawing the line and connecting them manually might be something that might not occur to everyone."},
+    {who:"Brandt · 34:42", img:"Brandt_34-42.jpg", txt:"Seems I only see home, portfolio and strategies... I think I'm pressing the wrong button. ... Oh wait, I was on all boards."}]}
+];
+
+const deck = document.getElementById('deck');
+
+// порядок категорий: мнение → критикал → проблемы → понравилось (последним)
+const ORDER = {opinion:0, takeaway:1, problem:2, liked:3};
+const ORDERED = [
+  ...SLIDES.filter(s => s.cover),
+  ...SLIDES.filter(s => !s.cover).sort((a,b) => ORDER[a.cat] - ORDER[b.cat])
+];
+
+ORDERED.forEach(s => {
+  const panel = document.createElement('div');
+  panel.className = 'panel';
+
+  if (s.cover){
+    panel.classList.add('cover');
+    panel.innerHTML = `
+      <div class="card"><div>
+        <div class="kicker">UX Testing · July 2026</div>
+        <h1>Тезисы по итогам 8 интервью и подтверждения цитатами</h1>
+        <p>Слева — тезис и цитаты пользователей с таймкодами. Справа — кадры из записей интервью. Листайте вправо →</p>
+        <div class="legend">
+          <span><i style="background:var(--yellow)"></i>Мнение о продукте</span>
+          <span><i style="background:var(--pink)"></i>Критикал</span>
+          <span><i style="background:var(--red)"></i>Проблема</span>
+          <span><i style="background:var(--green)"></i>Понравилось</span>
+        </div>
+      </div></div>`;
+    deck.appendChild(panel);
+    return;
+  }
+
+  panel.classList.add('cat-'+s.cat);
+  const quotesHtml = s.quotes.map(q =>
+    `<div class="q"><div class="who">${q.who}</div><div class="txt">${q.txt}</div></div>`).join('');
+  const shotsHtml = s.quotes.map(q => `
+    <div class="shot">
+      <img src="${DIR}${q.img}" alt="${q.who}"
+           onerror="this.style.display='none';this.parentNode.querySelector('.ph').style.display='flex';">
+      <span class="cap">${q.who}</span>
+      <div class="ph"><div class="file">${q.img}</div></div>
+    </div>`).join('');
+
+  panel.innerHTML = `
+    <div class="card">
+      <div class="left">
+        <span class="pill"><span class="dot"></span>${CAT[s.cat]}</span>
+        <div class="thesis">${s.title}</div>
+        <div class="quotes">${quotesHtml}</div>
+      </div>
+      <div class="right"><div class="shots">${shotsHtml}</div></div>
+    </div>`;
+  deck.appendChild(panel);
+});
+
+const panels = [...document.querySelectorAll('.panel')];
+document.getElementById('total').textContent = panels.length;
+const prev=document.getElementById('prev'), next=document.getElementById('next'), cur=document.getElementById('cur');
+let idx=0;
+function go(n){ idx=Math.max(0,Math.min(panels.length-1,n)); panels[idx].scrollIntoView({behavior:'smooth',inline:'center'}); update(); }
+function update(){ cur.textContent=idx+1; prev.disabled=idx===0; next.disabled=idx===panels.length-1; }
+prev.onclick=()=>go(idx-1); next.onclick=()=>go(idx+1);
+document.addEventListener('keydown',e=>{ if(e.key==='ArrowRight')go(idx+1); if(e.key==='ArrowLeft')go(idx-1); });
+deck.addEventListener('wheel',e=>{ if(Math.abs(e.deltaY)>Math.abs(e.deltaX)){ e.preventDefault(); deck.scrollLeft+=e.deltaY; } },{passive:false});
+let t; deck.addEventListener('scroll',()=>{ clearTimeout(t); t=setTimeout(()=>{ idx=Math.round(deck.scrollLeft/window.innerWidth); update(); },80); });
+update();
+</script>
+</body>
+</html>
