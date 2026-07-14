@@ -137,9 +137,12 @@ const SLIDES = [
   {cat:"opinion", title:"Автономная торговля — нет доказуемого трек-рекорда", quotes:[
     {who:"Ryan · 25:43", img:"Ryan_25-43.jpg", txt:"If the bot is essentially actively trading on my end, I'd rather not. You can't exactly backtest the bot. You have no evidence of it having a great track record."}]},
 
-  {cat:"takeaway", title:"Не даст AI доступ к счёту — исчезнет edge", quotes:[
-    {who:"Ryan · 23:08", img:"Ryan_23-08.jpg", txt:"Assuming I am finding a decent strategy, it should have an edge. As soon as that edge is known — which is what the AI is doing — it goes away. I can't make a profit."},
-    {who:"Anuj · 23:00 (исключение)", img:"Anuj_23-00.jpg", txt:"If there is an automated system, I would trust it as long as it's making some kind of profit at the end of the day."}]},
+  {cat:"takeaway", title:"Разрешение AI на доступ к счёту и сделки — против ≈6 из 8", quotes:[
+    {who:"Ryan · 23:08", img:"Ryan_23-08.jpg", txt:"As soon as that edge is known — which is what the AI is doing — it goes away. I can't make a profit. So I'd say no."},
+    {who:"Ansh · 22:06", img:"Ansh_22-06.jpg", txt:"I'd be fine with anything as long as it couldn't make the final decision without me. I draw the line where it makes decisions — buying or selling."},
+    {who:"Brandt · 23:00", img:"Brandt_23-00.jpg", txt:"If an AI system did say you should press buy or sell, that would probably be like a red flag personally for me."},
+    {who:"Kiyan · 15:15", img:"Kiyan_15-15.jpg", txt:"Making decision... this is for human. Only technical things — coding, sorting data — AI can do."},
+    {who:"Dong Hyuk · 13:32", img:"DongHyuk_13-32.jpg", txt:"I would not let AI code by itself... I don't think I would let it automatically trade for me — definitely not something autonomous."}]},
 
   {cat:"takeaway", title:"Не нашёл свёрнутый AI-чат. Навигация 2/10, не ожидал нодовой системы", quotes:[
     {who:"Ryan · 37:04", img:"Ryan_37-04.jpg", txt:"Ryan: Like this one right here. — Интервьюер: No, no, no. The one on the left."},
@@ -208,8 +211,8 @@ const SLIDES = [
 
 const deck = document.getElementById('deck');
 
-// порядок категорий: мнение → критикал → проблемы → понравилось (последним)
-const ORDER = {opinion:0, takeaway:1, problem:2, liked:3};
+// порядок категорий: мнение → проблемы → критикал → понравилось (последним)
+const ORDER = {opinion:0, problem:1, takeaway:2, liked:3};
 const ORDERED = [
   ...SLIDES.filter(s => s.cover),
   ...SLIDES.filter(s => !s.cover).sort((a,b) => ORDER[a.cat] - ORDER[b.cat])
