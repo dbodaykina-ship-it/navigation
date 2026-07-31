@@ -158,6 +158,7 @@ img{display:block;max-width:100%}
 
 .chat{display:flex;gap:12px;padding:10px 8px;border-radius:8px;cursor:default;align-items:flex-start}
 .chat:hover{background:var(--sf04)}
+.chat.clickable{cursor:pointer}
 .chat-ava{width:36px;height:36px;border-radius:100px;flex:none;overflow:hidden;position:relative;background:var(--sf08)}
 .chat-ava img{width:100%;height:100%;object-fit:cover}
 .chat-ava.flash{background:linear-gradient(135deg,#ff5a6e,#e0293f);display:flex;align-items:center;justify-content:center;border-radius:8px}
@@ -217,7 +218,7 @@ input.field::placeholder{color:var(--t32)}
   display:flex;align-items:center;justify-content:center;border-radius:6px;flex:none}
 .d-ic:hover{background:var(--sf08);color:var(--t100)}
 .d-ic .ic{width:20px;height:20px;-webkit-mask-size:auto;mask-size:auto}
-#agent-back .ic{transform:scaleX(-1)}
+#agent-back .ic,#chat-back .ic{transform:scaleX(-1)}
 .d-ava{width:24px;height:24px;border-radius:3px;object-fit:cover;flex:none;
   border:1.5px solid rgba(192,192,204,.16)}
 .d-ava.round{border-radius:50%}
@@ -262,7 +263,7 @@ input.field::placeholder{color:var(--t32)}
 .opt-chip.on .opt-sign{color:var(--brand)}
 .checkbox.off{background:transparent;border:2px solid var(--sf08)}
 /* футер режима редактирования — вторичная кнопка */
-.agent-save-bar{padding:16px}
+.agent-save-bar{padding:16px;border-top:0;box-shadow:none}
 .btn-save{width:100%;height:40px;border:0;border-radius:2px;background:var(--sf08);
   color:var(--t100);font-family:inherit;font-size:14px;font-weight:600;cursor:pointer}
 .btn-save:hover{background:var(--sf12)}
@@ -271,6 +272,9 @@ input.field::placeholder{color:var(--t32)}
 .chat-head{display:flex;align-items:center;gap:8px;height:56px;padding:12px 8px 12px 12px;flex:none}
 .chat-ava-sm{width:24px;height:24px;border-radius:3px;object-fit:cover;flex:none;
   border:1.5px solid rgba(192,192,204,.16)}
+.assistant-ava{width:24px;height:24px;border-radius:100px;background:rgba(120,99,246,.32);
+  display:flex;align-items:center;justify-content:center;flex:none;border:0;overflow:visible}
+.assistant-ava .ic{width:16px;height:16px;color:#fff}
 .chat-title-h{flex:1;min-width:0;font-size:14px;font-weight:600;color:var(--t100);
   white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .plus-ic{transform:rotate(45deg);-webkit-mask-size:13px;mask-size:13px}
@@ -613,7 +617,7 @@ input.field::placeholder{color:var(--t32)}
       <div class="hub-view" id="view-chat">
         <div class="chat-head">
           <button class="d-ic" id="chat-back" title="Назад"><i class="ic" style="--i:url(assets/agents/ic-back.svg)"></i></button>
-          <img class="chat-ava-sm" id="chat-ava" src="" alt="">
+          <span class="chat-ava-sm assistant-ava" id="chat-ava"><i class="ic" style="--i:url(assets/agents/ic-chat.svg)"></i></span>
           <span class="chat-title-h" id="chat-title">Новый чат</span>
           <button class="d-ic" title="Ещё"><i class="ic" style="--i:url(assets/agents/ic-tune.svg)"></i></button>
           <button class="d-ic" title="Новый чат"><i class="ic plus-ic" style="--i:url(assets/ic-plus.svg)"></i></button>
@@ -851,7 +855,7 @@ document.querySelectorAll('#spaces-grid,#ideas-grid').forEach(g=>g.innerHTML=car
 
 /* ---------- hub chat list ---------- */
 const CHATS=[
-  {ava:'flash',title:'Риски',sub:'Рекомендую обратить внимание на следующую стратегию',tags:['Риск-агент Вера','AI разбор...'],time:'12:43',badge:'3',flash:true},
+  {ava:'flash',title:'Риски',sub:'Рекомендую обратить внимание на следующую стратегию',tags:['Риск-агент Вера','AI разбор...'],time:'12:43',badge:'3',flash:true,open:'risks'},
   {ava:'news',img:'assets/hub/avatar-news-flame.svg',title:'Новостной поток',mute:true,sub:'Главная «звезда» рынка. «Сбер» может вновь увеличить дивиденды…',tags:['Новости по портфелю','Тикеры'],time:'09:12',badge:'239',badgeGray:true},
   {ava:'img',img:'assets/hub/avatar-mascot.png',title:'Консьерж',mute:true,sub:'Ваш брокерский счет добавлен на доску прп',tags:['События','Уведомления','Сервис'],time:'Пн',badge:'34',badgeGray:true},
   {ava:'agent',title:'Анализ позиций по тикерам RSHB dfgdfgfdg',sub:'Анна, у вас есть ещё ко мне вопросы?',time:'30.06',badge:'4',badgeGray:true},
@@ -870,7 +874,7 @@ function chatAva(c){
   return `<div class="chat-ava"><img src="${c.img}" alt=""></div>`;
 }
 document.getElementById('hub-list').innerHTML=CHATS.map(c=>`
-  <div class="chat">
+  <div class="chat${c.open?' clickable':''}" data-open="${c.open||''}">
     ${chatAva(c)}
     <div class="chat-body">
       <div class="chat-row1">
@@ -1045,7 +1049,7 @@ function addMsg(role,text){
   const w=document.getElementById('chat-msgs');
   const a=AGENTS.find(x=>x.id===currentAgent);
   w.insertAdjacentHTML('beforeend', role==='agent'
-    ? `<div class="msg agent"><img class="msg-ava${a&&a.round?' round':''}" src="${a?a.ava:''}"><div class="msg-text">${text}</div></div>`
+    ? `<div class="msg agent"><span class="msg-ava assistant-ava"><i class="ic" style="--i:url(assets/agents/ic-chat.svg)"></i></span><div class="msg-text">${text}</div></div>`
     : `<div class="msg user"><div class="msg-text">${text}</div></div>`);
   w.scrollTop=w.scrollHeight;
 }
@@ -1053,7 +1057,6 @@ function openChat(id,opts){
   opts=opts||{};
   const a=AGENTS.find(x=>x.id===id); if(!a) return;
   currentAgent=id;
-  const ava=document.getElementById('chat-ava'); ava.src=a.ava; ava.className='chat-ava-sm'+(a.round?' round':'');
   document.getElementById('chat-title').textContent='Новый чат с '+a.name;
   document.getElementById('chat-msgs').innerHTML='';
   renderSuggest();
@@ -1112,6 +1115,10 @@ document.getElementById('risks-list').innerHTML=RISKS.map(c=>`
 function openRisks(){app.classList.add('hub-open');setHubActive('chats');showView('risks');}
 document.querySelector('.js-risks').addEventListener('click',openRisks);
 document.getElementById('risks-back').addEventListener('click',()=>showView('chats'));
+/* клик по строке «Риски» в списке «Чаты» → тоже открывает список рисков */
+document.getElementById('hub-list').addEventListener('click',e=>{
+  if(e.target.closest('.chat[data-open="risks"]')) openRisks();
+});
 document.querySelectorAll('[data-hub]').forEach(b=>b.addEventListener('click',()=>{
   const open=app.classList.contains('hub-open');
   if(open && b.classList.contains('hub-active')) closeHub();   // клик по активному — закрыть
