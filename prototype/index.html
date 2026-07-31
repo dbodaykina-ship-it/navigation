@@ -86,6 +86,9 @@ img{display:block;max-width:100%}
 .sb-item .lbl{flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .sb-item.active{color:var(--brand)}
 .sb-item.active .ic{color:var(--brand)}
+.sb-item.hub-active{background:rgba(120,99,246,.12);color:var(--brand)}
+.sb-item.hub-active .ic{color:var(--brand)}
+.js-hub:hover{background:var(--sf08)}   /* серая заливка — на ховер (в т.ч. поверх выделения) */
 
 .sb-hublist{flex:1;display:flex;flex-direction:column;min-height:0;position:relative}
 .sb-divider{height:1px;background:var(--divider);width:100%;flex:none}
@@ -119,6 +122,7 @@ img{display:block;max-width:100%}
   border:0;background:none;cursor:pointer;color:var(--t72);border-radius:8px;width:36px;height:36px}
 .mini-item:hover{background:var(--sf04);color:var(--t100)}
 .mini-item.active{color:var(--brand)}
+.mini-item.hub-active{background:rgba(120,99,246,.12);color:var(--brand)}
 .mini-item .ic{width:20px;height:20px}
 .mini-sec{display:flex;flex-direction:column;align-items:center;width:100%}
 .mini-sec .sb-divider{width:48px;margin:0 auto}
@@ -134,11 +138,19 @@ img{display:block;max-width:100%}
   opacity:0;transform:translateX(-12px);transition:opacity .3s ease .1s,transform .38s var(--ease) .06s}
 .app.hub-open .hub-inner{opacity:1;transform:none}
 
+.hub-view{display:none;flex-direction:column;height:100%}
+.hub-view.active{display:flex}
 .hub-head{display:flex;align-items:center;gap:8px;height:48px;padding:12px 16px;flex:none}
 .hub-head h2{font-size:20px;font-weight:600;letter-spacing:-.4px;flex:1}
+#view-agents .hub-head h2{font-size:14px;font-weight:600;letter-spacing:-.2px}
+.risks-head{gap:8px;padding-left:8px}
+.risks-head h2{font-size:14px;font-weight:600;letter-spacing:-.2px;flex:1}
+.risks-ava{width:24px;height:24px;border-radius:6px;flex:none;display:flex;align-items:center;justify-content:center;
+  background:linear-gradient(135deg,#ff5a6e,#e0293f)}
+.risks-ava .ic{width:14px;height:14px;color:#fff}
 .hub-head button{border:0;background:none;cursor:pointer;color:var(--t56);width:20px;height:20px;padding:0}
 .hub-head button:hover{color:var(--t100)}
-.hub-head .ic{width:20px;height:20px}
+.hub-head .ic{width:20px;height:20px;-webkit-mask-size:auto;mask-size:auto}
 
 .hub-scroll{flex:1;overflow-y:auto;overflow-x:hidden;padding:0 8px}
 .hub-scroll::-webkit-scrollbar{width:8px}
@@ -173,6 +185,8 @@ img{display:block;max-width:100%}
 .hub-footer{flex:none;border-top:1px solid var(--brand);padding:14px 16px 16px;background:var(--panel)}
 .hub-input{display:flex;flex-direction:column;gap:10px}
 .hub-input .field{color:var(--t32);font-size:14px}
+input.field{background:none;border:0;outline:0;width:100%;font-family:inherit;color:var(--t100);padding:0}
+input.field::placeholder{color:var(--t32)}
 .hub-input .controls{display:flex;align-items:center;gap:10px}
 .hub-input .controls button{border:0;background:none;cursor:pointer;color:var(--t56);display:flex;align-items:center;gap:6px;padding:0;font-family:inherit}
 .hub-input .controls .ic{width:20px;height:20px}
@@ -180,6 +194,116 @@ img{display:block;max-width:100%}
 .model-sel .ic{width:14px;height:14px}
 .spacer{flex:1}
 .send{color:var(--brand) !important}
+
+/* ---- agents list ---- */
+.agent-row{display:flex;align-items:center;gap:8px;padding:8px 16px 8px 8px;cursor:pointer;
+  border-bottom:1px solid var(--sf06)}
+.agent-row:hover{background:var(--sf04)}
+.agent-ava{width:36px;height:36px;border-radius:3px;flex:none;object-fit:cover;
+  border:1.5px solid rgba(192,192,204,.16)}
+.agent-ava.round{border-radius:50%}
+.agent-main{flex:1;min-width:0;display:flex;flex-direction:column;gap:2px}
+.agent-name{font-size:12px;font-weight:500;color:var(--t100);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.agent-sub{font-size:12px;color:var(--t32);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.agent-act{width:24px;height:24px;border:0;background:none;cursor:pointer;color:var(--t56);
+  display:flex;align-items:center;justify-content:center;border-radius:2px;flex:none}
+.agent-act:hover{background:var(--sf08);color:var(--t100)}
+.agent-act .ic{width:24px;height:24px;-webkit-mask-size:auto;mask-size:auto}
+.act-open .ic{-webkit-mask-size:auto 12px;mask-size:auto 12px}
+
+/* ---- agent detail ---- */
+.detail-head{display:flex;align-items:center;gap:8px;height:56px;padding:12px 8px 12px 16px;flex:none}
+.d-ic{width:28px;height:28px;border:0;background:none;cursor:pointer;color:var(--t56);
+  display:flex;align-items:center;justify-content:center;border-radius:6px;flex:none}
+.d-ic:hover{background:var(--sf08);color:var(--t100)}
+.d-ic .ic{width:20px;height:20px;-webkit-mask-size:auto;mask-size:auto}
+#agent-back .ic{transform:scaleX(-1)}
+.d-ava{width:24px;height:24px;border-radius:3px;object-fit:cover;flex:none;
+  border:1.5px solid rgba(192,192,204,.16)}
+.d-ava.round{border-radius:50%}
+.d-name{flex:1;min-width:0;font-size:14px;font-weight:600;color:var(--t100);
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.agent-toolbar{display:flex;gap:4px;align-items:center;justify-content:center;padding:4px;
+  background:var(--sf04);flex:none}
+.agent-toolbar:empty{display:none}
+.tb-btn{display:flex;align-items:center;gap:4px;padding:8px 12px;border:0;background:none;
+  border-radius:4px;cursor:pointer;color:var(--t56);font-family:inherit;font-size:12px;font-weight:500}
+.tb-btn:hover{background:var(--sf08);color:var(--t100)}
+.tb-btn .ic{width:16px;height:16px;-webkit-mask-size:auto;mask-size:auto}
+
+.detail-body{padding:20px;display:flex;flex-direction:column;gap:20px}
+.d-sec{display:flex;flex-direction:column;gap:12px}
+.d-h{font-size:16px;font-weight:600;letter-spacing:-.4px;color:var(--t100)}
+.d-badge-row{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.badge-status{background:var(--sf12);color:var(--t100);padding:2px 8px;border-radius:80px;
+  font-size:14px;font-weight:600;letter-spacing:-.2px;white-space:nowrap}
+.d-text{font-size:14px;line-height:20px;color:var(--t56)}
+.d-chips{display:flex;gap:8px;flex-wrap:wrap}
+.d-chip{background:var(--sf12);color:var(--t100);padding:4px 12px;border-radius:80px;
+  font-size:14px;font-weight:600;letter-spacing:-.2px;white-space:nowrap}
+/* режим редактирования: сегмент-контрол риск-профиля */
+.seg-chips{display:flex;gap:2px;padding:2px;background:var(--sf08);border-radius:2px;width:100%}
+.seg-chip{flex:1;min-width:0;min-height:32px;padding:8px 12px;border-radius:1px;
+  font-size:14px;font-weight:600;letter-spacing:-.2px;background:transparent;color:var(--t56);
+  border:1px solid transparent;cursor:pointer;font-family:inherit;display:flex;align-items:center;
+  justify-content:center;text-align:center;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.seg-chip:hover{color:var(--t72)}
+.seg-chip.on{background:var(--brand-bg-deep);border-color:var(--brand-strong);color:var(--t100);
+  box-shadow:0 1px 4px rgba(0,0,0,.08)}
+.d-editcol{display:flex;flex-direction:column;gap:12px;width:100%}
+/* редактируемые чипы (аналитик): +/× */
+.opt-chips{display:flex;flex-wrap:wrap;gap:8px}
+.opt-chip{display:inline-flex;align-items:center;gap:6px;padding:8px 12px;border-radius:8px;
+  background:var(--sf06);border:1px solid transparent;color:var(--t72);font-size:14px;font-weight:500;
+  letter-spacing:-.2px;cursor:pointer;font-family:inherit}
+.opt-chip:hover{background:var(--sf08);color:var(--t100)}
+.opt-chip .opt-sign{color:var(--t32);font-weight:600}
+.opt-chip.on{background:var(--brand-bg);border-color:var(--brand-strong);color:var(--brand)}
+.opt-chip.on .opt-sign{color:var(--brand)}
+.checkbox.off{background:transparent;border:2px solid var(--sf08)}
+/* футер режима редактирования — вторичная кнопка */
+.agent-save-bar{padding:16px}
+.btn-save{width:100%;height:40px;border:0;border-radius:2px;background:var(--sf08);
+  color:var(--t100);font-family:inherit;font-size:14px;font-weight:600;cursor:pointer}
+.btn-save:hover{background:var(--sf12)}
+
+/* ---- новый чат с агентом ---- */
+.chat-head{display:flex;align-items:center;gap:8px;height:56px;padding:12px 8px 12px 12px;flex:none}
+.chat-ava-sm{width:24px;height:24px;border-radius:3px;object-fit:cover;flex:none;
+  border:1.5px solid rgba(192,192,204,.16)}
+.chat-title-h{flex:1;min-width:0;font-size:14px;font-weight:600;color:var(--t100);
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.plus-ic{transform:rotate(45deg);-webkit-mask-size:13px;mask-size:13px}
+.chat-scroll{flex:1;overflow-y:auto;overflow-x:hidden;padding:8px 16px;display:flex;flex-direction:column;gap:16px}
+.msg{display:flex;gap:10px;max-width:100%}
+.msg-ava{width:24px;height:24px;border-radius:3px;object-fit:cover;flex:none;border:1.5px solid rgba(192,192,204,.16)}
+.msg-text{font-size:14px;line-height:20px;color:var(--t100)}
+.msg.agent .msg-text{color:var(--t100)}
+.msg.user{justify-content:flex-end}
+.msg.user .msg-text{background:var(--brand-bg);padding:8px 12px;border-radius:12px 12px 2px 12px;color:var(--t100);max-width:80%}
+/* suggest cloud (active point) */
+.suggest-cloud{flex:none;padding:8px 16px 4px;display:flex;flex-direction:column;gap:8px}
+.sc-chips{display:flex;flex-wrap:wrap;gap:6px}
+.sc-chip{background:var(--brand-bg-deep);color:#cfc7ff;border:0;cursor:pointer;font-family:inherit;
+  font-size:12px;line-height:16px;padding:6px 10px;border-radius:8px;text-align:left}
+.sc-chip:hover{background:rgba(120,99,246,.42);color:#fff}
+.sc-auto{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--t56);margin-top:2px}
+.toggle{width:28px;height:16px;border-radius:20px;background:var(--sf12);position:relative;cursor:pointer;flex:none;transition:background .2s}
+.toggle .knob{position:absolute;top:2px;left:2px;width:12px;height:12px;border-radius:50%;background:#fff;transition:left .2s}
+.toggle.on{background:var(--brand-strong)}
+.toggle.on .knob{left:14px}
+.sc-note{font-size:10px;line-height:14px;color:var(--t32)}
+.sc-note .more-link{color:var(--t56)}
+.d-ul{margin:0;padding-left:21px;color:var(--t56);font-size:14px;line-height:20px}
+.d-ul li{margin-bottom:12px}
+.d-ul li:last-child{margin-bottom:0}
+.d-q{font-size:14px;color:var(--t100);line-height:20px}
+.d-check-row{display:flex;align-items:center;gap:8px}
+.checkbox{width:20px;height:20px;border-radius:2px;background:var(--brand-strong);flex:none;
+  display:flex;align-items:center;justify-content:center}
+.checkbox .ic{width:12px;height:12px;color:#fff}
+.email-input{flex:1;background:var(--sf06);border-radius:2px;padding:10px 12px;
+  font-size:14px;color:var(--t100)}
 
 /* ============================ MAIN / PAGES ============================ */
 .content{flex:1;min-width:0;height:100%;overflow-y:auto;overflow-x:hidden}
@@ -354,7 +478,7 @@ img{display:block;max-width:100%}
               <i class="ic" style="--i:url(assets/nav-ic-chats.svg)"></i><span class="lbl">Чаты</span>
               <i class="ic plusbtn" style="--i:url(assets/ic-plus.svg)"></i>
             </button>
-            <button class="sb-item dim"><span class="ava sq"><i class="ic" style="--i:url(assets/ic-flash.svg)"></i></span><span class="lbl">Риски</span></button>
+            <button class="sb-item dim js-risks"><span class="ava sq"><i class="ic" style="--i:url(assets/ic-flash.svg)"></i></span><span class="lbl">Риски</span></button>
             <button class="sb-item dim"><span class="ava sq"><i class="ic" style="--i:url(assets/ic-megaphone.svg)"></i></span><span class="lbl">Новости</span><span class="counter">232</span></button>
             <button class="sb-item dim"><span class="ava"><i class="ic" style="--i:url(assets/ic-comment.svg)"></i></span><span class="lbl">Default chat name</span></button>
             <button class="sb-item dim"><span class="ava"><i class="ic" style="--i:url(assets/ic-comment.svg)"></i></span><span class="lbl">Yfpdfybt xfnf</span></button>
@@ -402,24 +526,119 @@ img{display:block;max-width:100%}
   <!-- ============ HUB PANEL ============ -->
   <div class="hub">
     <div class="hub-inner">
-      <div class="hub-head">
-        <h2>Чат</h2>
-        <button title="Поиск"><i class="ic" style="--i:url(assets/hub/ic-search.svg)"></i></button>
-        <button id="hub-close" title="Закрыть"><i class="ic" style="--i:url(assets/hub/ic-close.svg)"></i></button>
-      </div>
-      <div class="hub-scroll" id="hub-list"></div>
-      <div class="hub-footer">
-        <div class="hub-input">
-          <div class="field">Напишите, что угодно</div>
-          <div class="controls">
-            <button title="Прикрепить"><i class="ic" style="--i:url(assets/hub/ic-attach.svg)"></i></button>
-            <div class="model-sel">Sonnet 4.5 <i class="ic" style="--i:url(assets/hub/ic-chevron-down.svg)"></i></div>
-            <div class="spacer"></div>
-            <button title="Голос"><i class="ic" style="--i:url(assets/hub/ic-mic.svg)"></i></button>
-            <button class="send" title="Отправить"><i class="ic send" style="--i:url(assets/hub/ic-send.svg)"></i></button>
+
+      <!-- VIEW: ЧАТЫ -->
+      <div class="hub-view active" id="view-chats">
+        <div class="hub-head">
+          <h2>Чаты</h2>
+          <button title="Поиск"><i class="ic" style="--i:url(assets/hub/ic-search.svg)"></i></button>
+          <button class="hub-close" title="Закрыть"><i class="ic" style="--i:url(assets/hub/ic-close.svg)"></i></button>
+        </div>
+        <div class="hub-scroll" id="hub-list"></div>
+        <div class="hub-footer">
+          <div class="hub-input">
+            <input class="field" placeholder="Напишите, что угодно">
+            <div class="controls">
+              <button title="Прикрепить"><i class="ic" style="--i:url(assets/hub/ic-attach.svg)"></i></button>
+              <div class="model-sel">Sonnet 4.5 <i class="ic" style="--i:url(assets/hub/ic-chevron-down.svg)"></i></div>
+              <div class="spacer"></div>
+              <button title="Голос"><i class="ic" style="--i:url(assets/hub/ic-mic.svg)"></i></button>
+              <button class="send" title="Отправить"><i class="ic send" style="--i:url(assets/hub/ic-send.svg)"></i></button>
+            </div>
           </div>
         </div>
       </div>
+
+      <!-- VIEW: АГЕНТЫ (список) -->
+      <div class="hub-view" id="view-agents">
+        <div class="hub-head">
+          <h2>Агенты</h2>
+          <button title="Поиск"><i class="ic" style="--i:url(assets/hub/ic-search.svg)"></i></button>
+          <button class="hub-close" title="Закрыть"><i class="ic" style="--i:url(assets/hub/ic-close.svg)"></i></button>
+        </div>
+        <div class="hub-scroll" id="agents-list"></div>
+      </div>
+
+      <!-- VIEW: ЭКРАН АГЕНТА (внутренний лейаут) -->
+      <div class="hub-view" id="view-agent">
+        <div class="detail-head">
+          <button class="d-ic" id="agent-back" title="Назад"><i class="ic" style="--i:url(assets/agents/ic-back.svg)"></i></button>
+          <img class="d-ava" id="agent-ava" src="" alt="">
+          <span class="d-name" id="agent-name"></span>
+          <button class="d-ic hub-close" title="Закрыть"><i class="ic" style="--i:url(assets/hub/ic-close.svg)"></i></button>
+        </div>
+        <div class="agent-toolbar" id="agent-toolbar"></div>
+        <div class="hub-scroll detail-body" id="agent-body"></div>
+        <div class="hub-footer" id="agent-footer-chat">
+          <div class="hub-input">
+            <input class="field" id="agent-field" placeholder="Начни разговор с агентом">
+            <div class="controls">
+              <button title="Прикрепить"><i class="ic" style="--i:url(assets/hub/ic-attach.svg)"></i></button>
+              <div class="model-sel">Sonnet 4.5 <i class="ic" style="--i:url(assets/hub/ic-chevron-down.svg)"></i></div>
+              <div class="spacer"></div>
+              <button title="Голос"><i class="ic" style="--i:url(assets/hub/ic-mic.svg)"></i></button>
+              <button class="send" title="Отправить"><i class="ic send" style="--i:url(assets/hub/ic-send.svg)"></i></button>
+            </div>
+          </div>
+        </div>
+        <div class="hub-footer agent-save-bar" id="agent-footer-save"><button class="btn-save" id="agent-save">Сохранить</button></div>
+      </div>
+
+      <!-- VIEW: РИСКИ (чат-лист по клику на «Риски») -->
+      <div class="hub-view" id="view-risks">
+        <div class="hub-head risks-head">
+          <button class="d-ic" id="risks-back" title="Назад"><i class="ic" style="--i:url(assets/agents/ic-back.svg)"></i></button>
+          <span class="risks-ava"><i class="ic" style="--i:url(assets/hub/ic-flash.svg)"></i></span>
+          <h2>Риски</h2>
+          <button title="Новый"><i class="ic plus-ic" style="--i:url(assets/ic-plus.svg)"></i></button>
+          <button title="Поиск"><i class="ic" style="--i:url(assets/hub/ic-search.svg)"></i></button>
+          <button class="hub-close" title="Закрыть"><i class="ic" style="--i:url(assets/hub/ic-close.svg)"></i></button>
+        </div>
+        <div class="hub-scroll" id="risks-list"></div>
+        <div class="hub-footer">
+          <div class="hub-input">
+            <input class="field" placeholder="Напишите, что угодно">
+            <div class="controls">
+              <button title="Прикрепить"><i class="ic" style="--i:url(assets/hub/ic-attach.svg)"></i></button>
+              <div class="model-sel">Sonnet 4.5 <i class="ic" style="--i:url(assets/hub/ic-chevron-down.svg)"></i></div>
+              <div class="spacer"></div>
+              <button title="Голос"><i class="ic" style="--i:url(assets/hub/ic-mic.svg)"></i></button>
+              <button class="send" title="Отправить"><i class="ic send" style="--i:url(assets/hub/ic-send.svg)"></i></button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- VIEW: НОВЫЙ ЧАТ С АГЕНТОМ -->
+      <div class="hub-view" id="view-chat">
+        <div class="chat-head">
+          <button class="d-ic" id="chat-back" title="Назад"><i class="ic" style="--i:url(assets/agents/ic-back.svg)"></i></button>
+          <img class="chat-ava-sm" id="chat-ava" src="" alt="">
+          <span class="chat-title-h" id="chat-title">Новый чат</span>
+          <button class="d-ic" title="Ещё"><i class="ic" style="--i:url(assets/agents/ic-tune.svg)"></i></button>
+          <button class="d-ic" title="Новый чат"><i class="ic plus-ic" style="--i:url(assets/ic-plus.svg)"></i></button>
+          <button class="d-ic hub-close" title="Закрыть"><i class="ic" style="--i:url(assets/hub/ic-close.svg)"></i></button>
+        </div>
+        <div class="chat-scroll" id="chat-msgs"></div>
+        <div class="suggest-cloud">
+          <div class="sc-chips" id="chat-suggest"></div>
+          <div class="sc-auto"><span>Автосаджест</span><span class="toggle on" id="autosuggest"><span class="knob"></span></span></div>
+          <div class="sc-note">ответ ai-чата не является индивидуальной инвестиционной рекомендацией и предложением упомянутых инструментов… <span class="more-link">ещё</span></div>
+        </div>
+        <div class="hub-footer">
+          <div class="hub-input">
+            <input class="field" placeholder="Напишите, что угодно">
+            <div class="controls">
+              <button title="Прикрепить"><i class="ic" style="--i:url(assets/hub/ic-attach.svg)"></i></button>
+              <div class="model-sel">Sonnet 4.5 <i class="ic" style="--i:url(assets/hub/ic-chevron-down.svg)"></i></div>
+              <div class="spacer"></div>
+              <button title="Голос"><i class="ic" style="--i:url(assets/hub/ic-mic.svg)"></i></button>
+              <button class="send" id="chat-send" title="Отправить"><i class="ic send" style="--i:url(assets/hub/ic-send.svg)"></i></button>
+            </div>
+          </div>
+        </div>
+      </div>
+
     </div>
   </div>
 
@@ -603,8 +822,6 @@ img{display:block;max-width:100%}
     </section>
   </div>
 </div>
-
-<div class="hint">Клик по <b>логотипу</b> сворачивает меню · <b>Чаты</b> и <b>Агенты</b> открывают панель поверх страницы</div>
 </div><!-- /#scale -->
 
 <script>
@@ -674,19 +891,21 @@ document.getElementById('hub-list').innerHTML=CHATS.map(c=>`
 const app=document.getElementById('app');
 let currentPage='spaces';
 
-/* единый активный пункт меню — совпадает по data-nav / data-hub на full и mini */
-function setActive(key,type){
-  document.querySelectorAll('[data-nav],[data-hub]').forEach(b=>{
-    const k=b.dataset.nav||b.dataset.hub;
-    const t=b.dataset.nav?'nav':'hub';
-    b.classList.toggle('active',k===key && t===type);
-  });
+/* два НЕЗАВИСИМЫХ состояния выделения:
+   • страница (data-nav) — фиолетовая подсветка, всегда одна активна;
+   • чаты/агенты (data-hub) — серая заливка кнопки, взаимоисключающие,
+     активны ОДНОВРЕМЕННО с выбранной страницей. */
+function setPageActive(page){
+  document.querySelectorAll('[data-nav]').forEach(b=>b.classList.toggle('active',b.dataset.nav===page));
+}
+function setHubActive(which){ // which=null снимает
+  document.querySelectorAll('[data-hub]').forEach(b=>b.classList.toggle('hub-active',b.dataset.hub===which));
 }
 function go(page){
   currentPage=page;
   document.querySelectorAll('.page').forEach(p=>p.classList.toggle('active',p.id==='page-'+page));
   document.querySelector('.content').scrollTop=0;
-  setActive(page,'nav');
+  setPageActive(page);            // страница остаётся выбранной независимо от чатов/агентов
 }
 document.querySelectorAll('[data-nav]').forEach(b=>b.addEventListener('click',()=>go(b.dataset.nav)));
 
@@ -695,15 +914,218 @@ function toggleCollapse(){app.classList.toggle('collapsed')}
 document.getElementById('brand-full').addEventListener('click',toggleCollapse);
 document.getElementById('brand-mini').addEventListener('click',toggleCollapse);
 
-/* ---------- слайдовер «Чат»: Чаты и Агенты открывают панель поверх страницы ---------- */
-function openHub(which){app.classList.add('hub-open');setActive(which,'hub');}
-function closeHub(){app.classList.remove('hub-open');setActive(currentPage,'nav');}
+/* ---------- агенты (список для панели «Агенты») ---------- */
+const AGENTS=[
+  {id:'companion',name:'Компаньон',ava:'assets/agents/avatar-companion.png',sub:'Твой помощник внутри системы'},
+  {id:'risk',name:'Риск — агент',ava:'assets/agents/avatar-risk.png',sub:'Настройки рисков для сессий',
+   toolbar:[{ic:'assets/agents/ic-tune.svg',label:'Настроить еще',act:'edit'},{ic:'assets/agents/ic-alert.svg',label:'Уведомления'},{ic:'assets/agents/ic-chat.svg',label:'Новый чат',act:'chat'}],
+   rulesTitle:'Базовые правила:',
+   rules:['слежу за просадками портфеля и позиций','предупреждаю о высокой концентрации в одном активе','пишу только о важном'],
+   badgeLabel:'Тип риск — профиля:',badge:'Сбалансированный',
+   profileOptions:['Сбалансированный','Консервативный','Агрессивный'],
+   detail:'В работу берутся только стратегии с profit factor 1.5+ — прибыль стабильно превышает убытки. Риск на сделку — не более 1% счёта, при дневной потере 3% торговля останавливается до конца дня. На один актив — не больше 20% портфеля, плечо — до 2×. При приближении просадки к предельным 20% размер позиций снижается вдвое.',
+   notify:'Присылать тебе уведомления вне платформы?',email:'Test@gmail',
+   notifyInputs:[{v:'@telegram',on:false},{v:'Test@gmail',on:true}],
+   notifyView:true,
+   chatGreeting:'Спроси все что ты хотел про Риски',
+   footer:'Начни разговор с риск агентом'},
+  {id:'analyst',name:'Агент — Аналитик',ava:'assets/agents/avatar-analyst.png',sub:'Проанализирует всё что угодно',
+   toolbar:[{ic:'assets/agents/ic-tune.svg',label:'Настроить еще',act:'edit'},{ic:'assets/agents/ic-alert.svg',label:'Уведомления'},{ic:'assets/agents/ic-chat.svg',label:'Новый чат',act:'chat'}],
+   rulesTitle:'Базовые правила:',
+   rules:['объясняю, почему бумага двинулась','подсказываю, что стоит проверить до сделки','даю аргументы, а не сигналы «купи/продай»'],
+   chipGroups:[
+     {title:'Активы интересующее вас:',editTitle:'Какие активы вас интересуют?',
+      options:['Акции','Фьючерсы и опционы','Валюта','Облигации','Криптовалюта','Фонды (ETF)'],
+      selected:['Облигации','Фьючерсы и опционы']},
+     {title:'Новостные темы:',editTitle:'Настроим новостные каналы по твоим интересам!',
+      options:['Слияния и поглощения','Финансовые результаты','Дивиденды и возврат капитала','Корпоративные действия и структура','Продажа активов / Дивестиция'],
+      selected:['Корпоративные действия и структура']}
+   ],
+   notify:'Присылать тебе уведомления вне платформы?',
+   notifyInputs:[{v:'@telegram',on:true},{v:'Test@gmail',on:true}],
+   chatGreeting:'Спроси все что ты хотел про аналитику',
+   footer:'Начни разговор с Агент — аналитиком'},
+  {id:'soros',name:'Джордж Соррос',ava:'assets/agents/avatar-soros.png',round:true,sub:'Рад, что мои наработки Вам помогли, обращайтесь!'}
+];
+document.getElementById('agents-list').innerHTML=AGENTS.map(a=>`
+  <div class="agent-row" data-agent="${a.id}">
+    <img class="agent-ava${a.round?' round':''}" src="${a.ava}" alt="">
+    <div class="agent-main">
+      <div class="agent-name">${a.name}</div>
+      <div class="agent-sub">${a.sub}</div>
+    </div>
+    <button class="agent-act act-chat" title="Открыть чат"><i class="ic" style="--i:url(assets/agents/ic-chat.svg)"></i></button>
+    <button class="agent-act act-open" title="Открыть"><i class="ic" style="--i:url(assets/agents/ic-chevron.svg)"></i></button>
+  </div>`).join('');
+
+/* ---------- слайдовер: виды «Чаты» / «Агенты» / экран агента ---------- */
+function showView(v){document.querySelectorAll('.hub-view').forEach(el=>el.classList.toggle('active',el.id==='view-'+v));}
+function openHub(which){app.classList.add('hub-open');setHubActive(which);showView(which);} // страница НЕ трогается
+function closeHub(){app.classList.remove('hub-open');setHubActive(null);}                    // фиолет страницы остаётся
+let currentAgent=null;
+function openAgent(id,mode){
+  mode=mode||'view';
+  const a=AGENTS.find(x=>x.id===id); if(!a) return;
+  currentAgent=id;
+  const edit=(mode==='edit');
+  const ava=document.getElementById('agent-ava');
+  ava.src=a.ava; ava.className='d-ava'+(a.round?' round':'');
+  document.getElementById('agent-name').textContent=edit?'Настроить агента':a.name;
+  const af=document.getElementById('agent-field'); af.value=''; af.placeholder=a.footer||('Начни разговор с '+a.name.toLowerCase());
+  // панель действий — только в режиме просмотра
+  document.getElementById('agent-toolbar').innerHTML=edit?'':(a.toolbar||[]).map(t=>
+    `<button class="tb-btn"${t.act?` data-act="${t.act}"`:''}><i class="ic" style="--i:url(${t.ic})"></i>${t.label}</button>`).join('');
+  // тело экрана
+  let html='';
+  if(a.rules) html+=`<div class="d-sec"><h3 class="d-h">${a.rulesTitle}</h3>`+
+    `<ul class="d-ul">${a.rules.map(r=>`<li>${r}</li>`).join('')}</ul></div>`;
+  if(a.profileOptions){                                  // риск-профиль: сегмент-контрол (edit) / бейдж (view)
+    html+= edit
+      ? `<div class="d-sec"><h3 class="d-h">${a.badgeLabel}</h3><div class="d-editcol">`+
+        `<div class="seg-chips">${a.profileOptions.map(o=>`<button class="seg-chip${o===a.badge?' on':''}" data-profile="${o}">${o}</button>`).join('')}</div>`+
+        `${a.detail?`<p class="d-text" style="color:var(--t100)">${a.detail}</p>`:''}</div></div>`
+      : `<div class="d-sec"><div class="d-badge-row"><h3 class="d-h">${a.badgeLabel}</h3>`+
+        `<span class="badge-status">${a.badge}</span></div>${a.detail?`<p class="d-text">${a.detail}</p>`:''}</div>`;
+  } else if(a.badge){
+    html+=`<div class="d-sec"><div class="d-badge-row"><h3 class="d-h">${a.badgeLabel}</h3>`+
+      `<span class="badge-status">${a.badge}</span></div>${a.detail?`<p class="d-text">${a.detail}</p>`:''}</div>`;
+  }
+  if(a.chipGroups) html+=a.chipGroups.map(g=>{
+    const sel=g.selected||g.chips||[];
+    if(edit&&g.options){                                 // редактирование: чипы-переключатели +/×
+      const chips=g.options.map((o,i)=>`<button class="opt-chip${sel.includes(o)?' on':''}" data-grp="${g.title}" data-opt="${i}">`+
+        `<span class="opt-sign">${sel.includes(o)?'✕':'+'}</span>${o}</button>`).join('');
+      return `<div class="d-sec"><h3 class="d-h">${g.editTitle||g.title}</h3><div class="opt-chips">${chips}</div></div>`;
+    }
+    return `<div class="d-sec"><h3 class="d-h">${g.title}</h3>`+            // просмотр: выбранные чипы
+      `<div class="d-chips">${sel.map(c=>`<span class="d-chip">${c}</span>`).join('')}</div></div>`;
+  }).join('');
+  if(a.notify && (edit || a.notifyView)){
+    const rows=(edit&&a.notifyInputs)?a.notifyInputs:[{v:a.email,on:true}];
+    html+=`<div class="d-sec"><p class="d-q">${a.notify}</p>`+
+      rows.map(r=>`<div class="d-check-row"><span class="checkbox${r.on?'':' off'}">`+
+        `${r.on?`<i class="ic" style="--i:url(assets/agents/ic-check.svg)"></i>`:''}</span>`+
+        `<div class="email-input">${r.v}</div></div>`).join('')+`</div>`;
+  }
+  if(!html) html=`<div class="d-sec"><p class="d-text">${a.sub}</p></div>`;
+  document.getElementById('agent-body').innerHTML=html;
+  // футер: чат (просмотр) ↔ «Сохранить» (редактирование)
+  document.getElementById('agent-footer-chat').style.display=edit?'none':'block';
+  document.getElementById('agent-footer-save').style.display=edit?'block':'none';
+  showView('agent');
+}
+/* «Настроить ещё» → режим редактирования; «Сохранить» → назад в просмотр */
+document.getElementById('agent-toolbar').addEventListener('click',e=>{
+  const b=e.target.closest('[data-act]'); if(!b) return;
+  if(b.dataset.act==='edit') openAgent(currentAgent,'edit');       // Настроить ещё → редактирование
+  else if(b.dataset.act==='chat') openChat(currentAgent,{greeting:true}); // Новый чат → чат с агентом
+});
+document.getElementById('agent-save').addEventListener('click',()=>openAgent(currentAgent,'view'));
+/* выбор риск-профиля в режиме редактирования */
+document.getElementById('agent-body').addEventListener('click',e=>{
+  const a=AGENTS.find(x=>x.id===currentAgent); if(!a) return;
+  const seg=e.target.closest('.seg-chip');
+  if(seg){a.badge=seg.dataset.profile; openAgent(currentAgent,'edit'); return;}
+  const oc=e.target.closest('.opt-chip');                 // выбор/снятие интереса (аналитик)
+  if(oc){
+    const g=a.chipGroups.find(gr=>gr.title===oc.dataset.grp);
+    const opt=g.options[+oc.dataset.opt]; const i=g.selected.indexOf(opt);
+    if(i>=0) g.selected.splice(i,1); else g.selected.push(opt);
+    openAgent(currentAgent,'edit');
+  }
+});
+
+/* ---------- новый чат с агентом ---------- */
+const SUGGEST=['Собрать всю информацию на доске в задачи','Найти убыток',
+  'Проанализировать результаты и снова посмотреть стратегию','Предложение #2',
+  'Предложение #3 в три четыре слова','Проанализировать результаты и снова посмотреть стратегию'];
+function renderSuggest(){
+  document.getElementById('chat-suggest').innerHTML=SUGGEST.map(s=>`<button class="sc-chip">${s}</button>`).join('');
+}
+function addMsg(role,text){
+  const w=document.getElementById('chat-msgs');
+  const a=AGENTS.find(x=>x.id===currentAgent);
+  w.insertAdjacentHTML('beforeend', role==='agent'
+    ? `<div class="msg agent"><img class="msg-ava${a&&a.round?' round':''}" src="${a?a.ava:''}"><div class="msg-text">${text}</div></div>`
+    : `<div class="msg user"><div class="msg-text">${text}</div></div>`);
+  w.scrollTop=w.scrollHeight;
+}
+function openChat(id,opts){
+  opts=opts||{};
+  const a=AGENTS.find(x=>x.id===id); if(!a) return;
+  currentAgent=id;
+  const ava=document.getElementById('chat-ava'); ava.src=a.ava; ava.className='chat-ava-sm'+(a.round?' round':'');
+  document.getElementById('chat-title').textContent='Новый чат с '+a.name;
+  document.getElementById('chat-msgs').innerHTML='';
+  renderSuggest();
+  const field=document.querySelector('#view-chat .field'); if(field) field.value='';
+  if(opts.userMsg){                                  // вариант 2: отправили промт — система отвечает на него
+    addMsg('user',opts.userMsg);
+    addMsg('agent','Разбираю запрос: «'+opts.userMsg+'». Секунду…');
+  } else {                                           // вариант 1: агент сам спрашивает
+    addMsg('agent', a.chatGreeting || ('Спроси все, что ты хотел про '+a.name));
+  }
+  app.classList.add('hub-open'); setHubActive('agents'); showView('chat');
+}
+/* отправка сообщения из экрана агента → открывает чат с этим промтом */
+document.querySelector('#agent-footer-chat .send').addEventListener('click',()=>{
+  const v=document.getElementById('agent-field').value.trim();
+  openChat(currentAgent, v?{userMsg:v}:{greeting:true});
+});
+document.getElementById('agent-field').addEventListener('keydown',e=>{
+  if(e.key==='Enter'){const v=e.target.value.trim(); if(v) openChat(currentAgent,{userMsg:v});}
+});
+/* отправка внутри чата */
+function chatSend(){
+  const f=document.querySelector('#view-chat .field'); const v=f.value.trim(); if(!v) return;
+  addMsg('user',v); f.value='';
+  setTimeout(()=>addMsg('agent','Принял: «'+v+'». Готовлю ответ…'),150);
+}
+document.getElementById('chat-send').addEventListener('click',chatSend);
+document.querySelector('#view-chat .field').addEventListener('keydown',e=>{if(e.key==='Enter')chatSend();});
+/* клик по саджест-чипу — как отправленное сообщение */
+document.getElementById('chat-suggest').addEventListener('click',e=>{
+  const c=e.target.closest('.sc-chip'); if(!c) return;
+  addMsg('user',c.textContent); setTimeout(()=>addMsg('agent','Выполняю: «'+c.textContent+'»…'),150);
+});
+document.getElementById('autosuggest').addEventListener('click',e=>e.currentTarget.classList.toggle('on'));
+document.getElementById('chat-back').addEventListener('click',()=>openAgent(currentAgent,'view'));
+
+/* ---------- «Риски» (чат-лист по клику на «Риски» в списке «Чаты») ---------- */
+const RISKS=[
+  {ava:'flash',title:'Сводка по критам',sub:'Риск по позиции сейчас составляет 1,6% от капитала…',time:'30.06',badge:'2',flash:true},
+  {ava:'flash',title:'Портфель «Все активы»',sub:'Соотношение «риск к прибыли» по открытой сделке сейчас…',time:'30.06',badge:'1',flash:true},
+  {ava:'img',img:'assets/hub/avatar-chat.png',title:'Риск-агент Петя',sub:'За последние сутки по счёту прошло 14 сделок, тогда как…',time:'30.06',badge:'3',flash:true}
+];
+document.getElementById('risks-list').innerHTML=RISKS.map(c=>`
+  <div class="chat">
+    ${chatAva(c)}
+    <div class="chat-body">
+      <div class="chat-row1"><span class="chat-title">${c.title}</span></div>
+      <div class="chat-sub">${c.sub}</div>
+    </div>
+    <div class="chat-right">
+      <span class="chat-time">${c.time}</span>
+      ${c.badge?`<span class="badge-n">${c.badge}</span>`:''}
+      ${c.flash?`<i class="ic flash" style="--i:url(assets/hub/ic-flash-sm.svg)"></i>`:''}
+    </div>
+  </div>`).join('');
+function openRisks(){app.classList.add('hub-open');setHubActive('chats');showView('risks');}
+document.querySelector('.js-risks').addEventListener('click',openRisks);
+document.getElementById('risks-back').addEventListener('click',()=>showView('chats'));
 document.querySelectorAll('[data-hub]').forEach(b=>b.addEventListener('click',()=>{
   const open=app.classList.contains('hub-open');
-  if(open && b.classList.contains('active')) closeHub();       // клик по активному — закрыть
-  else openHub(b.dataset.hub);                                 // открыть / переключить источник
+  if(open && b.classList.contains('hub-active')) closeHub();   // клик по активному — закрыть
+  else openHub(b.dataset.hub);                                 // открыть / переключить (чаты↔агенты)
 }));
-document.getElementById('hub-close').addEventListener('click',closeHub);
+/* клик по строке агента (кроме иконки чата) открывает внутренний экран */
+document.getElementById('agents-list').addEventListener('click',e=>{
+  const row=e.target.closest('.agent-row'); if(!row) return;
+  if(e.target.closest('.act-chat')) openChat(row.dataset.agent,{greeting:true}); // иконка чата → чат с агентом (агент спрашивает)
+  else openAgent(row.dataset.agent);                                             // клик по строке → экран агента
+});
+document.getElementById('agent-back').addEventListener('click',()=>showView('agents'));
+document.querySelectorAll('.hub-close').forEach(b=>b.addEventListener('click',closeHub));
 document.addEventListener('keydown',e=>{if(e.key==='Escape')closeHub()});
 </script>
 </body>
